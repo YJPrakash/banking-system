@@ -3,7 +3,9 @@ const MongoClient = require('mongodb').MongoClient
 const bodyParser = require('body-parser')
 
 const app = express()
-const jsonParser = bodyParser.json()
+const jsonParser = bodyParser.urlencoded({
+    extended: true
+});
 const url = 'mongodb://localhost:27017'
 
 var getAccountsFromDB = (db, callback) => {
@@ -143,7 +145,7 @@ app.post('/', jsonParser, function (request, response) {
         let name = request.body.name
         let balance = request.body.balance
         let db = client.db('bank')
-
+        console.log(name, balance);
         //eg: POST + http://localhost:3000/ + {"name":"Alexa","balance":"100"} -> in body
         insertAccountInDB(name, balance, db, (documentsReturned) => {
             response.json(documentsReturned)
@@ -166,4 +168,4 @@ app.delete('/:name', (request, response) => {
     })
 })
 
-app.listen(3000)
+app.listen(8000)
